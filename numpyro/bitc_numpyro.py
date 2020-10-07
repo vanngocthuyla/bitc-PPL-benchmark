@@ -3,7 +3,7 @@ import time
 
 import jax
 import jax.numpy as jnp
-from jax import random, vmap, ops
+from jax import randon
 import jax.random as random
 
 import matplotlib
@@ -13,10 +13,7 @@ import numpy as np
 import numpyro
 import numpyro.distributions as dist
 from numpyro.distributions import LogNormal, Normal, Uniform
-from numpyro.infer import MCMC, NUTS, init_to_value
-from numpyro.infer.util import initialize_model
-from numpyro.util import fori_collect
-from numpyro.infer.hmc import hmc
+from numpyro.infer import MCMC, NUTS, SA, init_to_value
 
 import arviz as az
 
