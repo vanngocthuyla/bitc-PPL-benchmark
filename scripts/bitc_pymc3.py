@@ -250,10 +250,17 @@ injection_volumes = [INJ_VOL for _ in range(n_injections)]
 
 model = make_TwoComponentBindingModel(q_actual_cal, injection_volumes, CELL_CONCENTR, SYRINGE_CONCENTR)
 
+# To generate initial values for NUTS. If we don't do this, NUTS sampler can crash
+with model:
+    step = pymc3.Metropolis()
+    _trace = pymc3.sample(draws=5000, step=step, cores=4, chains=4)
+    samples = extract_samples_from_trace(_trace)
+    start = {k: samples[k][-1] for k in samples}
+
 # run NUTS
 with model:
     step = pymc3.NUTS()
-    trace = pymc3.sample(draws=10000, step=step, cores=4, chains=4)
+    trace = pymc3.sample(draws=10_000, step=step, start=start, cores=4, chains=4)
 
 pymc3.summary(trace)
 
