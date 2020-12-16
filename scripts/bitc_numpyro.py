@@ -1,38 +1,35 @@
 import os
-import time
+import pickle
+import numpy as np
+import arviz as az
+import matplotlib
+import matplotlib.pyplot as plt
 
 import jax
 import jax.numpy as jnp
 import jax.random as random
 
-import matplotlib
-import matplotlib.pyplot as plt
-import numpy as np
-
 import numpyro
 import numpyro.distributions as dist
 from numpyro.distributions import LogNormal, Normal, Uniform
 from numpyro.infer import MCMC, NUTS
-import arviz as az
 
 from jax.config import config
 config.update("jax_enable_x64", True)
 numpyro.set_host_device_count(4)
-
-start = time.time()
 
 KB = 0.0019872041        # in kcal/mol/K
 INJ_VOL = 1.2e-5         # in liter
 CELL_CONCENTR = 0.1      # milli molar
 SYRINGE_CONCENTR = 1.0   # milli molar
 
-HEAT_FILE = "inputs/Mg1EDTAp1a.DAT"
-OUT_DIR = "outputs"
+HEAT_FILE = "~/inputs/Mg1EDTAp1a.DAT"
+OUT_DIR = "~/outputs"
 
 def load_heat_micro_cal(origin_heat_file):
     """
     :param origin_heat_file: str, name of heat file
-    :return: 1d ndarray, heats in micro calorie
+    :return: DeviceArray, heats in micro calorie
     """
 
     heats = []
@@ -96,14 +93,11 @@ def heats_TwoComponentBindingModel(V0, DeltaVn, P0, Ls, DeltaG, DeltaH, DeltaH_0
         # total quantity of ligand in sample cell after n injections (mol)
         L = V0 * Ls * 1.e-3 * (1. - dcum)
         # complex concentration (M)
-        #PLn[n] = (0.5 / V0 * ((P + L + Kd * V0) - jnp.sqrt((P + L + Kd * V0) ** 2 - 4 * P * L) ))
         PLn = jax.ops.index_add(PLn, jax.ops.index[n], 
                                 0.5 / V0 * ((P + L + Kd * V0) - jnp.sqrt( (P + L + Kd * V0) ** 2 - 4 * P * L) ))
         # free protein concentration in sample cell after n injections (M)
-        #Pn[n] = P / V0 - PLn[n]
         Pn = jax.ops.index_add(Pn, jax.ops.index[n], P / V0 - PLn[n])
         # free ligand concentration in sample cell after n injections (M)
-        #Ln[n] = L / V0 - PLn[n]
         Ln = jax.ops.index_add(Ln, jax.ops.index[n], L / V0 - PLn[n])
 
     # Compute expected injection heats.
@@ -111,13 +105,11 @@ def heats_TwoComponentBindingModel(V0, DeltaVn, P0, Ls, DeltaG, DeltaH, DeltaH_0
     q_n = jnp.zeros([N], dtype=jnp.float64)
     # Instantaneous injection model (perfusion)
     # first injection
-    #q_n[0] = (DeltaH * V0 * PLn[0])*1000. + DeltaH_0
     q_n = jax.ops.index_add(q_n, jax.ops.index[0], (DeltaH * V0 * PLn[0])*1000. + DeltaH_0)
 
     for n in range(1, N):
         d = 1.0 - (DeltaVn[n] / V0)  # dilution factor (dimensionless)
         # subsequent injections
-        #q_n[n] = (DeltaH * V0 * (PLn[n] - d * PLn[n - 1])) * 1000. + DeltaH_0
         q_n = jax.ops.index_add(q_n, jax.ops.index[n], (DeltaH * V0 * (PLn[n] - d * PLn[n - 1])) * 1000. + DeltaH_0)
 
     return jnp.array(q_n)
@@ -139,7 +131,6 @@ def deltaH0_guesses(q_n_cal):
 
 def lognormal_prior(name, stated_value, uncertainty):
     """
-    Define a pymc3 prior for a deimensionless quantity
     :param name: str
     :param stated_value: float
     :uncertainty: float
@@ -167,6 +158,8 @@ def param(q_actual_cal, injection_volumes, cell_concentration, syringe_concentra
           uniform_P0=False, P0_min=None, P0_max=None, 
           uniform_Ls=False, Ls_min=None, Ls_max=None):
     """
+    :param q_actual_cal: observed heats in calorie, array-like
+    :param injection_volumes: injection volumes in liter, array-like
     :param cell_concentration: concentration of the sample cell in milli molar, float
     :param syringe_concentration: concentration of the syringe in milli molar, float
     :param cell_volume: volume of sample cell in liter, float #check the instrutment 
@@ -179,6 +172,8 @@ def param(q_actual_cal, injection_volumes, cell_concentration, syringe_concentra
     :param uniform_Ls: if True, use uniform prior for syringe concentration, bool
     :param Ls_min: only use if uniform_Ls is True, float
     :param Ls_max: only use if uniform_Ls is True, float
+
+    :return: priors for P0, Ls, DeltaG, DeltaH, DeltaH_0, log_sigma
     """
     if uniform_P0 and (P0_min is None or P0_max is None):
         raise ValueError("If uniform_P0 is True, both P0_min and P0_max must be provided")
@@ -213,16 +208,10 @@ def param(q_actual_cal, injection_volumes, cell_concentration, syringe_concentra
         # print("LogNormal prior for Ls")
         Ls = lognormal_prior("Ls", stated_value=stated_Ls, uncertainty=uncertainty_Ls)
   
-    # prior for DeltaG
+    # priors for DeltaG, DeltaH, DeltaH_0, log_sigma
     DeltaG = uniform_prior("DeltaG", lower=-40., upper=4.)
-
-    # prior for DeltaH
     DeltaH = uniform_prior("DeltaH", lower=-100., upper=100.)
-
-    # prior for DeltaH_0
     DeltaH_0 = uniform_prior("DeltaH_0", lower=DeltaH_0_min, upper=DeltaH_0_max)
-
-    # prior for log_sigma
     log_sigma = uniform_prior("log_sigma", lower=log_sigma_min, upper=log_sigma_max)
 
     return P0, Ls, DeltaG, DeltaH, DeltaH_0, log_sigma
@@ -272,18 +261,15 @@ def make_TwoComponentBindingModel(q_actual_cal, injection_volumes,
     numpyro.sample('q_obs', dist.Normal(loc=q_model_cal, scale=sigma_cal), obs=q_actual_cal)
 
 rng_key = random.split(random.PRNGKey(0))
-
 kernel = NUTS(make_TwoComponentBindingModel)
-nuts = MCMC(kernel, num_warmup=2000, num_samples=10000, num_chains=4)
-nuts.run(rng_key, q_actual_cal, injection_volumes, CELL_CONCENTR, SYRINGE_CONCENTR)
-nuts.print_summary()
+mcmc = MCMC(kernel, num_warmup=2000, num_samples=10000, num_chains=4)
+mcmc.run(rng_key, q_actual_cal, injection_volumes, CELL_CONCENTR, SYRINGE_CONCENTR)
+mcmc.print_summary()
 
-end = time.time()
-print("Time for running numpyro:", end - start)
+trace = mcmc.get_samples(group_by_chain=True)
+pickle.dump(make_TwoComponentBindingModel, open(os.path.join(OUT_DIR, "numpyro.pickle"), "wb"))
+pickle.dump(trace, open(os.path.join(OUT_DIR, "numpyro_trace.pickle"), "wb"))
 
-trace_nuts = nuts.get_samples(group_by_chain=True)
-data_nuts = az.convert_to_inference_data(trace_nuts)
-az.plot_trace(data_nuts)
-plt.tight_layout()
+data = az.convert_to_inference_data(trace)
+az.plot_trace(data)
 plt.savefig(os.path.join(OUT_DIR, "numpyro_trace.pdf"))
-

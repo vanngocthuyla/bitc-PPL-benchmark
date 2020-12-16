@@ -17,8 +17,8 @@ INJ_VOL = 1.2e-5         # in liter
 CELL_CONCENTR = 0.1      # milli molar
 SYRINGE_CONCENTR = 1.0   # milli molar
 
-HEAT_FILE = "inputs/Mg1EDTAp1a.DAT"
-OUT_DIR = "outputs"
+HEAT_FILE = "~/inputs/Mg1EDTAp1a.DAT"
+OUT_DIR = "~/outputs"
 
 def load_heat_micro_cal(origin_heat_file):
     """
