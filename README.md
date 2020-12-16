@@ -64,14 +64,20 @@ Pymc3 v3.8, Theano v1.0.5, Pandas v0.25, Arviz v0.4.1
 |log_sigma|-14.779|0.168|-15.091|-14.467|0.002|0.002|4880.0|4786.0|4233.0|1562.0|1.0|
 
 ### Comparison of 3 PPLs
-- Time
+#### Time
 
 Time for running 4 chains of 2000 warmups and 10000 samples by NUTS sampling: 
+
     - numpyro: 24.01 s
     - pyro: 425.27 s
     - pymc3: 34304.32 s
+
 Note: disable the progressbar while running can decrease the running time of pyro and pymc3, but not decrease more than 10% of total running time for each of these two PPLs. 
 
-- Gelman-rubin statistics 
-- Plot mean/std with the functions of the number of samples
+#### Gelman-rubin statistics 
+
+
+#### Plot mean/std with the functions of the number of samples
+
+
 
