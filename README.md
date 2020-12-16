@@ -4,7 +4,24 @@
 
 In previous research ([1](https://github.com/choderalab/bayesian-itc), [2](https://github.com/nguyentrunghai/bayesian-itc/tree/d8cbf43240862e85d72d7d0c327ae2c6f750e600)), MCMC was applied to build Bayesian model that could do sampling from the posterior distribution of thermodynamic parameters from ITC data. 
 
-$\theta$ $\equiv$ ($\Delta$ G, $\Delta$ H, $\Delta$ H_0, [R]_0, [L]_s, log_sigma)
+- Data: D $\equiv$ {q1, q2, ..., qn} consists of the observed heats per injection
+- Parameters: $\theta$ $\equiv$ ($\Delta$ G, $\Delta$ H, $\Delta$ H_0, $[R]$_0, $[L]$_s, log_$\sigma$)
+- Priors: 
+<p align="center">
+$\delta$G ~ Uniform(-40 kcal/mol, 40kcal/mol)
+
+<p align="center">
+$\delta$H ~ Uniform(-100 kcal/mol, 100kcal/mol)
+
+<p align="center">
+$\delta$H_0 ~ Uniform(qmin - $\delta$q, qmax - $\delta$q)
+
+<p align="center">
+$\sigma$ ~ uninformative Jeffreys prior
+
+
+  
+where qmin = min{q1, q2, qN}, qmax = max{q1, q2, ..., qn} and $\delta$q = qmax - qmin
 
 Pymc was used as the probabilistic programming language (PPL) for the model implementation. Now this model can be extended with other two PPLs, which are Numpyro and Pyro.
 
