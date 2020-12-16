@@ -4,42 +4,37 @@
 
 In previous research ([1](https://github.com/choderalab/bayesian-itc), [2](https://github.com/nguyentrunghai/bayesian-itc/tree/d8cbf43240862e85d72d7d0c327ae2c6f750e600)), MCMC was applied to build Bayesian model that could do sampling from the posterior distribution of thermodynamic parameters from ITC data. 
 
-- Data: D $\equiv$ {q1, q2, ..., qn} consists of the observed heats per injection
-- Parameters: $\theta$ $\equiv$ ($\Delta$ G, $\Delta$ H, $\Delta$ H_0, [R]0, [L]s, log_$\sigma$)
+- Data: D &equiv; {q<sub>1</sub>, q<sub>2</sub>, ..., q<sub>n</sub>} consists of the observed heats per injection
+- Parameters: &theta; &equiv; &Delta;G, &Delta;H, &Delta;H<sub>0</sub>, [R]<sub>0</sub>, [L]<sub>s</sub>, log&sigma;)
 - Priors: 
-<p align="center">
-$\delta$G ~ Uniform(-40 kcal/mol, 40 kcal/mol)
+<div align="center"> &Delta;G ~ Uniform(-40 kcal/mol, 40 kcal/mol) </div>  
 
-<p align="center">
-$\delta$H ~ Uniform(-100 kcal/mol, 100k cal/mol)
+<div align="center"> &Delta;H ~ Uniform(-100 kcal/mol, 100k cal/mol) </div>  
 
-<p align="center">
-$\delta$H_0 ~ Uniform(qmin - $\delta$q, qmax - $\delta$q)
+<div align="center"> &sigma; ~ uninformative Jeffreys prior </div>  
 
-<p align="center">
-$\sigma$ ~ uninformative Jeffreys prior
+<div align="center"> &Delta;H<sub>0</sub> ~ Uniform(q<sub>min</sub> - &Delta;q, q<sub>max</sub> - &Delta;q) </div>  
+
+where q<sub>min</sub> = min{q<sub>1</sub>, q<sub>2</sub>, ..., q<sub>n</sub>}, q<sub>max</sub> = max{q<sub>1</sub>, q<sub>2</sub>, ..., q<sub>n</sub>} and &Delta;q = q<sub>max</sub> - q<sub>min</sub>. Priors for [R]<sub>0</sub>, [L]s follow the lognormal distribution if stated value is available: 
+<div align="center"> ln[X]<sub>0</sub> ∼ Normal ([X]<sub>stated</sub>, 0.1∗[X]<sub>stated</sub>) </div>  
+
+Otherwise, they follow the uniform distribution:
+
+<div align="center"> [R]<sub>0</sub> ∼ Uniform(0.001, 1.), [L]<sub>s</sub> ∼ Uniform(0.01, 10.) </div>  
   
-where qmin = min{q1, q2, qN}, qmax = max{q1, q2, ..., qn} and $\delta$q = qmax - qmin. Priors for [R]0, [L]s follow the lognormal distribution if stated value is available: 
-
-<p align="center">
-ln[X]_0 ∼ Normal ([X]stated0, 0.1∗[X]stated0)
-
-Otherwise, they follow the uniform distribution. 
-<p align="center">
-[R]0 ∼ Uniform(0.001, 1.), [L]s ∼ Uniform(0.01, 10.).
-
-Details information about the Bayesian model can be found [here](https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0203224). Pymc was used as the probabilistic programming language (PPL) for the model implementation. Now this model can be extended with other two PPLs, which are Numpyro and Pyro.
-
-Data for running the Bayesian model can be found here: [Mg1EDTAp1a.DAT](https://github.com/vanngocthuyla/bitc/tree/main/inputs/Mg1EDTAp1a.DAT)
+Details information about the Bayesian model can be found [here](https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0203224). Pymc was used as the probabilistic programming language (PPL) for the model implementation. Now this model can be extended with other two PPLs, which are Numpyro and Pyro. Data for running the Bayesian model and do the comparison can be found here: [Mg1EDTAp1a.DAT](https://github.com/vanngocthuyla/bitc/tree/main/inputs/Mg1EDTAp1a.DAT)
 
 ## 2. Installation of three PPLs
 
 - Numpyro: 
 Numpyro v0.4.1, Numpy v1.18.5, Matplotlib v3.2.2, Arviz v0.10.0
+
 - Pyro:
 Pyro v1.5.1, Torch v1.7.0, Numpy v1.18.5, Matplotlib v3.2.2, Arviz v0.10.0
+
 - Pymc3:
 Pymc3 v3.8, Theano v1.0.5, Pandas v0.25, Arviz v0.4.1
+
 - Python scripts: [numpyro](https://github.com/vanngocthuyla/bitc/blob/main/scripts/bitc_numpyro.py), [pyro](https://github.com/vanngocthuyla/bitc/blob/main/scripts/bitc_pyro.py), [pymc3](https://github.com/vanngocthuyla/bitc/blob/main/scripts/bitc_pymc3.py),
 
 ## 3. Accessing the PPL models and comparing their performance
@@ -110,6 +105,7 @@ Use function from Arviz to calculate r_hat factor of each paramete and plot r_ha
   <img src="https://github.com/vanngocthuyla/bitc/blob/main/images/rhat_Ls.png" width="300" />
   <img src="https://github.com/vanngocthuyla/bitc/blob/main/images/rhat_DeltaG.png" width="300" />
 </p>
+
 <p float="center">
   <img src="https://github.com/vanngocthuyla/bitc/blob/main/images/rhat_DeltaH.png" width="300" />
   <img src="https://github.com/vanngocthuyla/bitc/blob/main/images/rhat_DeltaH_0.png" width="300" />
