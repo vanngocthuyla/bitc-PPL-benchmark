@@ -26,7 +26,7 @@ Pymc3 v3.8, Theano v1.0.5, Pandas v0.25, Arviz v0.4.1
 - Numpyro
 
 <img align="center" width="800" src='https://vanngocthuyla.github.io/Data_Analysis/images/bayesian/Numpyro_Plot.png'>
-  
+
 |Parameter|mean|std|median|5.0%|95.0%|n_eff|r_hat|
 |:-------:|:--:|:-:|:----:|:--:|:---:|:---:|:---:|
 |DeltaG|-8.99|0.08|-8.99|-9.12|-8.87|7859.73|1.00|
@@ -65,6 +65,13 @@ Pymc3 v3.8, Theano v1.0.5, Pandas v0.25, Arviz v0.4.1
 
 ### Comparison of 3 PPLs
 - Time
+
+Time for running 4 chains of 2000 warmups and 10000 samples by NUTS sampling: 
+    - numpyro: 24.01 s
+    - pyro: 425.27 s
+    - pymc3: 34304.32 s
+Note: disable the progressbar while running can decrease the running time of pyro and pymc3, but not decrease more than 10% of total running time for each of these two PPLs. 
+
 - Gelman-rubin statistics 
 - Plot mean/std with the functions of the number of samples
 
