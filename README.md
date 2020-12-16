@@ -58,19 +58,9 @@ Pymc3 v3.8, Theano v1.0.5, Pandas v0.25, Arviz v0.4.1
 |DeltaH_0|-0.00|0.00|-0.00|-0.00|-0.00|20708.19|1.00|
 |log_sigma|-14.78|0.17|-14.79|-15.05|-14.51|16259.00|1.00|
 
-The trace plots and r_hat (Gelman-rubin) factors above indicate that in each PPL, the NUTS sampling model has converged. The values of parameters from three PPLs are approximate.
+The trace plots and r_hat (Gelman-rubin) factors above indicate that in each PPL, the NUTS sampling model has converged. To confirm that there was no difference between three Bayesian models, some statistical metrics would be plotted with the functions of the number of samples. In additions, the time for running were accessed below to decide which PPL could provide the better performance. 
 
 ### Comparison of 3 PPLs
-#### Time
-
-Time for running 4 chains of 2000 warmups and 10000 samples by NUTS sampling: 
-- pymc3: 425.27 s
-- numpyro: 24.01 s
-- pyro: 34304.32 s
-
-Among the three PPLs, numpyro dramatically took the least time for running, especially in comparison to pyro, which took about 9.5 hours to reach the similar convergence as numpyro. 
-
-Note: disable the progressbar while running can decrease the running time of pyro and pymc3, but not decrease more than 10% of total running time for each of these two PPLs. 
 
 #### Plot mean/std with the functions of the number of samples
 
@@ -101,6 +91,18 @@ Use function from Arviz to calculate r_hat factor of each paramete and plot r_ha
 </p>
 
 r_hat (Gelman-rubin) diagnostic is a common factor that can often be used to as the diagnosis for the convergence of the Bayesian model. From the above plots, except for r_hat calculated from the sampling of log_sigma of Pymc3 model was little different to those of Numpyro and Pyro models, the r_hat factors of other parameters from three PPLs were nearly equal to 1, pointing out that there was no difference between the multiple Markov chains of each PPL.
+
+#### Time
+
+Time for running 4 chains of 2000 warmups and 10000 samples by NUTS sampling: 
+- pymc3: 425.27 s
+- numpyro: 24.01 s
+- pyro: 34304.32 s
+
+Among the three PPLs, numpyro dramatically took the least time for running, especially in comparison to pyro, which took about 9.5 hours to reach the similar convergence as numpyro. 
+
+Note: disable the progressbar while running can decrease the running time of pyro and pymc3, but not decrease more than 10% of total running time for each of these two PPLs. 
+
 
 ## Conclusion
 
