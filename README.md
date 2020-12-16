@@ -1,5 +1,3 @@
-<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=default"></script>
-
 # Comparison of the three PPLs (numpyro, pyro and pymc3) for running the ITC (isothermal titration calorimetry) data
 
 ## 1. Introduction
