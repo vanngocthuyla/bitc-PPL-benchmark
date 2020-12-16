@@ -8,10 +8,10 @@ In previous research ([1](https://github.com/choderalab/bayesian-itc), [2](https
 - Parameters: $\theta$ $\equiv$ ($\Delta$ G, $\Delta$ H, $\Delta$ H_0, [R]0, [L]s, log_$\sigma$)
 - Priors: 
 <p align="center">
-$\delta$G ~ Uniform(-40 kcal/mol, 40kcal/mol)
+$\delta$G ~ Uniform(-40 kcal/mol, 40 kcal/mol)
 
 <p align="center">
-$\delta$H ~ Uniform(-100 kcal/mol, 100kcal/mol)
+$\delta$H ~ Uniform(-100 kcal/mol, 100k cal/mol)
 
 <p align="center">
 $\delta$H_0 ~ Uniform(qmin - $\delta$q, qmax - $\delta$q)
@@ -26,9 +26,9 @@ ln[X]_0 ∼ Normal ([X]stated0, 0.1∗[X]stated0)
 
 Otherwise, they follow the uniform distribution. 
 <p align="center">
-[R]0 ∼ Uniform(0.001,1), [L]s ∼ Uniform(0.01,10).
+[R]0 ∼ Uniform(0.001, 1.), [L]s ∼ Uniform(0.01, 10.).
 
-Pymc was used as the probabilistic programming language (PPL) for the model implementation. Now this model can be extended with other two PPLs, which are Numpyro and Pyro.
+Details information about the Bayesian model can be found [here](https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0203224). Pymc was used as the probabilistic programming language (PPL) for the model implementation. Now this model can be extended with other two PPLs, which are Numpyro and Pyro.
 
 Data for running the Bayesian model can be found here: [Mg1EDTAp1a.DAT](https://github.com/vanngocthuyla/bitc/tree/main/inputs/Mg1EDTAp1a.DAT)
 
