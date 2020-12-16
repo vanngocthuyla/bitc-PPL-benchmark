@@ -15,7 +15,7 @@ In previous research ([1](https://github.com/choderalab/bayesian-itc), [2](https
 
 <div align="center"> &Delta;H<sub>0</sub> ~ Uniform(q<sub>min</sub> - &Delta;q, q<sub>max</sub> - &Delta;q) </div>  
 
-where q<sub>min</sub> = min{q<sub>1</sub>, q<sub>2</sub>, ..., q<sub>n</sub>}, q<sub>max</sub> = max{q<sub>1</sub>, q<sub>2</sub>, ..., q<sub>n</sub>} and &Delta;q = q<sub>max</sub> - q<sub>min</sub>. Priors for [R]<sub>0</sub>, [L]s follow the lognormal distribution if stated value is available: 
+where q<sub>min</sub> = min{q<sub>1</sub>, q<sub>2</sub>, ..., q<sub>n</sub>}, q<sub>max</sub> = max{q<sub>1</sub>, q<sub>2</sub>, ..., q<sub>n</sub>} and &Delta;q = q<sub>max</sub> - q<sub>min</sub>. Priors for [R]<sub>0</sub>, [L]<sub>s</sub> follow the lognormal distribution if stated value is available: 
 <div align="center"> ln[X]<sub>0</sub> ∼ Normal ([X]<sub>stated</sub>, 0.1∗[X]<sub>stated</sub>) </div>  
 
 Otherwise, they follow the uniform distribution:
