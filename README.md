@@ -78,13 +78,23 @@ Calculate the mean and standard deviation of 8-chain samples and plot with the f
 
 <img align="center" src='https://github.com/vanngocthuyla/bitc/blob/main/images/mean_std_P0.png' width="800">
 <img align="center" src='https://github.com/vanngocthuyla/bitc/blob/main/images/mean_std_Ls.png' width="800">
-<img align="center" src='https://github.com/vanngocthuyla/bitc/blob/main/images/mean_std_DetlaG.png' width="800">
+<img align="center" src='https://github.com/vanngocthuyla/bitc/blob/main/images/mean_std_DeltaG.png' width="800">
 <img align="center" src='https://github.com/vanngocthuyla/bitc/blob/main/images/mean_std_DeltaH.png' width="800">
 <img align="center" src='https://github.com/vanngocthuyla/bitc/blob/main/images/mean_std_DeltaH_0.png' width="800">
 <img align="center" src='https://github.com/vanngocthuyla/bitc/blob/main/images/mean_std_log_sigma.png' width="800">
 
 #### Gelman-rubin statistics 
 
+<p float="center">
+  <img src="https://github.com/vanngocthuyla/bitc/blob/main/images/rhat_P0.png" width="300" />
+  <img src="https://github.com/vanngocthuyla/bitc/blob/main/images/rhat_Ls.png" width="300" />
+  <img src="https://github.com/vanngocthuyla/bitc/blob/main/images/rhat_DeltaG.png" width="300" />
+</p>
+<p float="center">
+  <img src="https://github.com/vanngocthuyla/bitc/blob/main/images/rhat_DeltaH.png" width="300" />
+  <img src="https://github.com/vanngocthuyla/bitc/blob/main/images/rhat_DeltaH_0.png" width="300" />
+  <img src="https://github.com/vanngocthuyla/bitc/blob/main/images/rhat_log_sigma.png" width="300" /> 
+</p>
 
 
 
