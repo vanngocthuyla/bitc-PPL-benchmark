@@ -248,7 +248,7 @@ def make_TwoComponentBindingModel(q_actual_cal,
     return P0, Ls, DeltaG, DeltaH, DeltaH_0, log_sigma
 
 nuts_kernel = NUTS(make_TwoComponentBindingModel)
-mcmc = MCMC(nuts_kernel, warmup_steps=10, num_samples=50, num_chains=4)
+mcmc = MCMC(nuts_kernel, warmup_steps=2000, num_samples=10000, num_chains=4)
 mcmc.run(q_actual_cal, injection_volumes, CELL_CONCENTR, SYRINGE_CONCENTR)
 mcmc.summary()
 
