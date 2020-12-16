@@ -36,7 +36,6 @@ Pymc3 v3.8, Theano v1.0.5, Pandas v0.25, Arviz v0.4.1
 |P0|0.09|0.01|0.09|0.08|0.10|5376.25|1.00|
 |log_sigma|-14.78|0.16|-14.79|-15.05|-14.52|8316.83|1.00
 
-
 - Pyro
 
 <img align="center" src='https://vanngocthuyla.github.io/Data_Analysis/images/bayesian/Pyro_Plot.png' width="800">
@@ -67,10 +66,9 @@ Pymc3 v3.8, Theano v1.0.5, Pandas v0.25, Arviz v0.4.1
 #### Time
 
 Time for running 4 chains of 2000 warmups and 10000 samples by NUTS sampling: 
-
-    - numpyro: 24.01 s
-    - pyro: 425.27 s
-    - pymc3: 34304.32 s
+- numpyro: 24.01 s
+- pyro: 425.27 s
+- pymc3: 34304.32 s
 
 Note: disable the progressbar while running can decrease the running time of pyro and pymc3, but not decrease more than 10% of total running time for each of these two PPLs. 
 
