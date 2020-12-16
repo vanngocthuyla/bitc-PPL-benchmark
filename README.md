@@ -101,15 +101,15 @@ Even though the means from some parameters (P0, Ls and DeltaH) of Pyro model wer
 Use function from Arviz to calculate r_hat factor of each paramete and plot r_hat with the function of the number of samples
 
 <p float="center">
-  <img src="https://github.com/vanngocthuyla/bitc/blob/main/images/rhat_P0.png" width="300" />
-  <img src="https://github.com/vanngocthuyla/bitc/blob/main/images/rhat_Ls.png" width="300" />
-  <img src="https://github.com/vanngocthuyla/bitc/blob/main/images/rhat_DeltaG.png" width="300" />
+  <img src="https://github.com/vanngocthuyla/bitc/blob/main/images/rhat_P0.png" width="250" />
+  <img src="https://github.com/vanngocthuyla/bitc/blob/main/images/rhat_Ls.png" width="250" />
+  <img src="https://github.com/vanngocthuyla/bitc/blob/main/images/rhat_DeltaG.png" width="250" />
 </p>
 
 <p float="center">
-  <img src="https://github.com/vanngocthuyla/bitc/blob/main/images/rhat_DeltaH.png" width="300" />
-  <img src="https://github.com/vanngocthuyla/bitc/blob/main/images/rhat_DeltaH_0.png" width="300" />
-  <img src="https://github.com/vanngocthuyla/bitc/blob/main/images/rhat_log_sigma.png" width="300" /> 
+  <img src="https://github.com/vanngocthuyla/bitc/blob/main/images/rhat_DeltaH.png" width="250" />
+  <img src="https://github.com/vanngocthuyla/bitc/blob/main/images/rhat_DeltaH_0.png" width="250" />
+  <img src="https://github.com/vanngocthuyla/bitc/blob/main/images/rhat_log_sigma.png" width="250" /> 
 </p>
 
 r_hat (Gelman-rubin) factor is a common factor that can often be used to as the diagnosis for the convergence of the Bayesian model. From the above plots, except for r_hat calculated from the sampling of log_sigma of Pymc3 model was little different to those of Numpyro and Pyro models, the r_hat factors of other parameters from three PPLs were nearly equal to 1, pointing out that there was no difference between the multiple Markov chains of each PPL.
