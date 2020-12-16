@@ -5,7 +5,7 @@
 In previous research ([1](https://github.com/choderalab/bayesian-itc), [2](https://github.com/nguyentrunghai/bayesian-itc/tree/d8cbf43240862e85d72d7d0c327ae2c6f750e600)), MCMC was applied to build Bayesian model that could do sampling from the posterior distribution of thermodynamic parameters from ITC data. 
 
 - Data: D $\equiv$ {q1, q2, ..., qn} consists of the observed heats per injection
-- Parameters: $\theta$ $\equiv$ ($\Delta$ G, $\Delta$ H, $\Delta$ H_0, $[R]$_0, $[L]$_s, log_$\sigma$)
+- Parameters: $\theta$ $\equiv$ ($\Delta$ G, $\Delta$ H, $\Delta$ H_0, [R]0, [L]s, log_$\sigma$)
 - Priors: 
 <p align="center">
 $\delta$G ~ Uniform(-40 kcal/mol, 40kcal/mol)
@@ -18,10 +18,15 @@ $\delta$H_0 ~ Uniform(qmin - $\delta$q, qmax - $\delta$q)
 
 <p align="center">
 $\sigma$ ~ uninformative Jeffreys prior
-
-
   
-where qmin = min{q1, q2, qN}, qmax = max{q1, q2, ..., qn} and $\delta$q = qmax - qmin
+where qmin = min{q1, q2, qN}, qmax = max{q1, q2, ..., qn} and $\delta$q = qmax - qmin. Priors for [R]0, [L]s follow the lognormal distribution if stated value is available: 
+
+<p align="center">
+ln[X]_0 ∼ Normal ([X]stated0, 0.1∗[X]stated0)
+
+Otherwise, they follow the uniform distribution. 
+<p align="center">
+[R]0 ∼ Uniform(0.001,1), [L]s ∼ Uniform(0.01,10).
 
 Pymc was used as the probabilistic programming language (PPL) for the model implementation. Now this model can be extended with other two PPLs, which are Numpyro and Pyro.
 
