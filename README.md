@@ -58,7 +58,7 @@ Pymc3 v3.8, Theano v1.0.5, Pandas v0.25, Arviz v0.4.1
 |DeltaH_0|-0.00|0.00|-0.00|-0.00|-0.00|20708.19|1.00|
 |log_sigma|-14.78|0.17|-14.79|-15.05|-14.51|16259.00|1.00|
 
-The trace plots and r_hat (Gelman-rubin) factors above indicate that in each PPL, the NUTS sampling model has converged. To confirm that there was no difference between three Bayesian models, some statistical metrics would be plotted with the functions of the number of samples. In additions, the time for running were accessed below to decide which PPL could provide the better performance. 
+The trace plots and r_hat (Gelman-rubin) factors above indicate that in each PPL, the NUTS sampling model converged. To confirm that there was no difference between three Bayesian models, some statistical metrics would be plotted with the functions of the number of samples. In additions, the time for running was accessed to decide which PPL could provide the better performance. 
 
 ### Comparison of 3 PPLs
 
