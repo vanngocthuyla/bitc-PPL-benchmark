@@ -25,10 +25,10 @@ Pymc3 v3.8, Theano v1.0.5, Pandas v0.25, Arviz v0.4.1
 ### Checking the convergence of 3 PPLs
 - Numpyro
 
-<img src='https://vanngocthuyla.github.io/Data_Analysis/images/bayesian/Numpyro_Plot.png' width="800">
-
+<img align="center" width="800" src='https://vanngocthuyla.github.io/Data_Analysis/images/bayesian/Numpyro_Plot.png'>
+  
 |Parameter|mean|std|median|5.0%|95.0%|n_eff|r_hat|
-|---------|----|---|------|----|-----|-----|-----|
+|:-------:|:--:|:-:|:----:|:--:|:---:|:---:|:---:|
 |DeltaG|-8.99|0.08|-8.99|-9.12|-8.87|7859.73|1.00|
 |DeltaH|-2.10|0.15|-2.10|-2.34|-1.86|5488.17|1.00|
 |DeltaH_0|-0.00|0.00|-0.00|-0.00|-0.00|11006.09|1.00|
@@ -36,12 +36,13 @@ Pymc3 v3.8, Theano v1.0.5, Pandas v0.25, Arviz v0.4.1
 |P0|0.09|0.01|0.09|0.08|0.10|5376.25|1.00|
 |log_sigma|-14.78|0.16|-14.79|-15.05|-14.52|8316.83|1.00
 
+
 - Pyro
 
-<img src='https://vanngocthuyla.github.io/Data_Analysis/images/bayesian/Pyro_Plot.png' width="800">
+<img align="center" src='https://vanngocthuyla.github.io/Data_Analysis/images/bayesian/Pyro_Plot.png' width="800">
 
 |Parameter|mean|std|median|5.0%|95.0%|n_eff|r_hat|
-|---------|----|---|------|----|-----|-----|-----|
+|:-------:|:--:|:-:|:----:|:--:|:---:|:---:|:---:|
 |P0|0.09|0.01|0.09|0.08|0.10|9944.88|1.00|
 |Ls|1.12|0.08|1.11|0.99|1.24|9950.80|1.00|
 |DeltaG|-8.99|0.08|-8.99|-9.12|-8.87|14202.63|1.00|
@@ -51,10 +52,10 @@ Pymc3 v3.8, Theano v1.0.5, Pandas v0.25, Arviz v0.4.1
 
 - Pymc3
 
-<img src='https://vanngocthuyla.github.io/Data_Analysis/images/bayesian/Pymc3_Plot.png' width="800">
+<img align="center" src='https://vanngocthuyla.github.io/Data_Analysis/images/bayesian/Pymc3_Plot.png' width="800">
 
 |Parameter|mean|sd|hpd_3%|hpd_97%|mcse_mean|mcse_sd|ess_mean|ess_sd|ess_bulk|ess_tail|r_hat|
-|---------|----|--|------|-------|---------|-------|--------|------|--------|--------|-----|
+|:-------:|:--:|:-:|:---:|:-----:|:-------:|:-----:|:------:|:----:|:------:|:------:|:---:|
 |P0|0.088|0.006|0.077|0.100|0.000|0.000|12960.0|12866.0|13083.0|8512.0|1.0|
 |Ls|1.119|0.080|0.974|1.271|0.001|0.000|12979.0|12887.0|13100.0|8608.0|1.0|
 |DeltaG|-8.992|0.076|-9.135|-8.847|0.001|0.000|21974.0|21973.0|21894.0|34408.0|1.0|
