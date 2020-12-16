@@ -74,7 +74,7 @@ Note: disable the progressbar while running can decrease the running time of pyr
 
 #### Plot mean/std with the functions of the number of samples
 
-Calculate the mean and standard deviation of 8-chain samples and plot with the function of the number of samples. 
+Calculate the mean and standard deviation of 8-chain samples and plot with the function of the number of samples
 
 <img align="center" src='https://github.com/vanngocthuyla/bitc/blob/main/images/mean_std_P0.png' width="800">
 <img align="center" src='https://github.com/vanngocthuyla/bitc/blob/main/images/mean_std_Ls.png' width="800">
@@ -84,6 +84,8 @@ Calculate the mean and standard deviation of 8-chain samples and plot with the f
 <img align="center" src='https://github.com/vanngocthuyla/bitc/blob/main/images/mean_std_log_sigma.png' width="800">
 
 #### Gelman-rubin statistics 
+
+Use function from Arviz to calculate r_hat factor of each paramete and plot r_hat with the function of the number of samples
 
 <p float="center">
   <img src="https://github.com/vanngocthuyla/bitc/blob/main/images/rhat_P0.png" width="300" />
