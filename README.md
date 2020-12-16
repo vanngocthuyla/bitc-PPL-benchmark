@@ -106,4 +106,4 @@ Note: disable the progressbar while running can decrease the running time of pyr
 
 ## Conclusion
 
-Based on the time and the Gelman-rubin diagnostic, Numpyro can be considered as the fastly-performing PPL in comparison to Pyro and Pymc3. 
+Numpyro can be considered as the fastly-performed PPL in comparison to Pyro and Pymc3. 
