@@ -25,7 +25,7 @@ Pymc3 v3.8, Theano v1.0.5, Pandas v0.25, Arviz v0.4.1
 ### Checking the convergence of 3 PPLs
 - Numpyro
 
-<img align="center" width="800" src='https://vanngocthuyla.github.io/Data_Analysis/images/bayesian/Numpyro_Plot.png'>
+<img align="center" width="800" src='https://github.com/vanngocthuyla/bitc/blob/main/images/Numpyro_Plot.png'>
 
 |Parameter|mean|std|median|5.0%|95.0%|n_eff|r_hat|
 |:-------:|:--:|:-:|:----:|:--:|:---:|:---:|:---:|
@@ -38,7 +38,7 @@ Pymc3 v3.8, Theano v1.0.5, Pandas v0.25, Arviz v0.4.1
 
 - Pyro
 
-<img align="center" src='https://vanngocthuyla.github.io/Data_Analysis/images/bayesian/Pyro_Plot.png' width="800">
+<img align="center" src='https://github.com/vanngocthuyla/bitc/blob/main/images/Pyro_Plot.png' width="800">
 
 |Parameter|mean|std|median|5.0%|95.0%|n_eff|r_hat|
 |:-------:|:--:|:-:|:----:|:--:|:---:|:---:|:---:|
@@ -51,7 +51,7 @@ Pymc3 v3.8, Theano v1.0.5, Pandas v0.25, Arviz v0.4.1
 
 - Pymc3
 
-<img align="center" src='https://vanngocthuyla.github.io/Data_Analysis/images/bayesian/Pymc3_Plot.png' width="800">
+<img align="center" src='https://github.com/vanngocthuyla/bitc/blob/main/images/Pymc3_Plot.png' width="800">
 
 |Parameter|mean|sd|hpd_3%|hpd_97%|mcse_mean|mcse_sd|ess_mean|ess_sd|ess_bulk|ess_tail|r_hat|
 |:-------:|:--:|:-:|:---:|:-----:|:-------:|:-----:|:------:|:----:|:------:|:------:|:---:|
@@ -72,10 +72,21 @@ Time for running 4 chains of 2000 warmups and 10000 samples by NUTS sampling:
 
 Note: disable the progressbar while running can decrease the running time of pyro and pymc3, but not decrease more than 10% of total running time for each of these two PPLs. 
 
+#### Plot mean/std with the functions of the number of samples
+
+Plot the mean and standard deviation of each parameter with the function of the number of samples.
+
+<img align="center" src='https://github.com/vanngocthuyla/bitc/blob/main/images/mean_std_P0.png' width="800">
+<img align="center" src='https://github.com/vanngocthuyla/bitc/blob/main/images/mean_std_Ls.png' width="800">
+<img align="center" src='https://github.com/vanngocthuyla/bitc/blob/main/images/mean_std_DetlaG.png' width="800">
+<img align="center" src='https://github.com/vanngocthuyla/bitc/blob/main/images/mean_std_DeltaH.png' width="800">
+<img align="center" src='https://github.com/vanngocthuyla/bitc/blob/main/images/mean_std_DeltaH_0.png' width="800">
+<img align="center" src='https://github.com/vanngocthuyla/bitc/blob/main/images/mean_std_log_sigma.png' width="800">
+
 #### Gelman-rubin statistics 
 
 
-#### Plot mean/std with the functions of the number of samples
+
 
 
 
