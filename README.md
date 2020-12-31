@@ -1,131 +1,153 @@
-# Comparison of the three PPLs (numpyro, pyro and pymc3) for running the ITC (isothermal titration calorimetry) data
+Title: "Benchmark of three probabilistic programming languages for Bayesian analysis of isothermal titration calorimetry data"
+date: 2020-12-18
+author: Van La, Trung Hai Nguyen, Yuanqing Wang, John Chodera, and David D. L. Minh
+short: We compared the performance of three probabilistic programming languages - pymc3, pyro, and numpyro - on a binding-related Bayesian statistical inference problem. numpyro was by far the fastest.
 
-## 1. Introduction
+Jump to [abstract](#abstract), [introduction](#introduction), [methods](#methods), [results](#results), or [conclusions](#conclusions).
 
-In previous research ([1](https://github.com/choderalab/bayesian-itc), [2](https://github.com/nguyentrunghai/bayesian-itc/tree/d8cbf43240862e85d72d7d0c327ae2c6f750e600)), MCMC was applied to build Bayesian model that could do sampling from the posterior distribution of thermodynamic parameters from ITC data. 
+# Abstract
 
-- Data: D &equiv; {q<sub>1</sub>, q<sub>2</sub>, ..., q<sub>n</sub>} consists of the observed heats per injection
-- Parameters: &theta; &equiv; &Delta;G, &Delta;H, &Delta;H<sub>0</sub>, [R]<sub>0</sub>, [L]<sub>s</sub>, log&sigma;)
-- Priors: 
-<div align="center"> &Delta;G ~ Uniform(-40 kcal/mol, 40 kcal/mol) </div>  
+We compared the performance of three probabilistic programming languages - pymc3, pyro, and numpyro - on a binding-related Bayesian statistical inference problem. numpyro was by far the fastest.
 
-<div align="center"> &Delta;H ~ Uniform(-100 kcal/mol, 100k cal/mol) </div>  
+# Introduction
 
-<div align="center"> &sigma; ~ uninformative Jeffreys prior </div>  
+The last few years have seen the rapid development of python-based probabilistic programming languages (PPLs) that enable users to specify a Bayesian posterior and perform statistical inference. The PPLs differ in syntax, underlying mathematical libraries, and the use of computing architectures. In the course of a project to develop algorithms and software to analyze data from binding experiments, we sought to compare the performance of a few of them: pymc3, pyro, and numpyro.
 
-<div align="center"> &Delta;H<sub>0</sub> ~ Uniform(q<sub>min</sub> - &Delta;q, q<sub>max</sub> - &Delta;q) </div>  
+We chose these PPLs for various reasons. We selected pymc3 because it syntactically similar to pymc2, which we used in our previous on the analysis of isothermal titration calorimetry (ITC) data ([1](https://github.com/choderalab/bayesian-itc), [2](https://github.com/nguyentrunghai/bayesian-itc/tree/d8cbf43240862e85d72d7d0c327ae2c6f750e600)). We selected pyro based on a suggestion by Theofanis Karaletsos, an early developer of the package, who explained that its open-source developer community is quite active. Theo also suggested that we try numpyro, which is syntactically similar to pyro but based on the numpy mathematical library. It is less established than pyro.
 
-where q<sub>min</sub> = min{q<sub>1</sub>, q<sub>2</sub>, ..., q<sub>n</sub>}, q<sub>max</sub> = max{q<sub>1</sub>, q<sub>2</sub>, ..., q<sub>n</sub>} and &Delta;q = q<sub>max</sub> - q<sub>min</sub>. Priors for [R]<sub>0</sub>, [L]<sub>s</sub> follow the lognormal distribution if stated value is available: 
-<div align="center"> ln[X]<sub>0</sub> ∼ Normal ([X]<sub>stated</sub>, 0.1∗[X]<sub>stated</sub>) </div>  
+# Methods
 
-Otherwise, they follow the uniform distribution:
+## Bayesian posterior
 
-<div align="center"> [R]<sub>0</sub> ∼ Uniform(0.001, 1.), [L]<sub>s</sub> ∼ Uniform(0.01, 10.) </div>  
-  
-Details information about the Bayesian model can be found [here](https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0203224). Pymc was used as the probabilistic programming language (PPL) for the model implementation. Now this model can be extended with other two PPLs, which are Numpyro and Pyro. Data for running the Bayesian model and do the comparison can be found here: [Mg1EDTAp1a.DAT](https://github.com/vanngocthuyla/bitc/tree/main/inputs/Mg1EDTAp1a.DAT)
+Details of the Bayesian posterior are described in a [scientific journal article](https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0203224). Some key aspects are:
 
-## 2. Installation of three PPLs
+- Data, D &equiv; {q<sub>1</sub>, q<sub>2</sub>, ..., q<sub>n</sub>}, consists of the observed heats per injection. For this benchmark, we used [Mg1EDTAp1a.DAT](https://github.com/vanngocthuyla/bitc/tree/main/inputs/Mg1EDTAp1a.DAT).
+- Parameters, &theta; &equiv; &Delta;G, &Delta;H, &Delta;H<sub>0</sub>, [R]<sub>0</sub>, [L]<sub>s</sub>, log&sigma; are the binding free energy, binding enthalpy, enthalpy of dilution, original receptor concentration in the sample cell, original ligand concentation in the syringe, and a noise parameter.
+- Priors are distributed as,
+    * &Delta;G ~ Uniform(-40 kcal/mol, 40 kcal/mol),
+    * &Delta;H ~ Uniform(-100 kcal/mol, 100k cal/mol),
+    * &sigma; ~ uninformative Jeffreys prior,
+    * &Delta;H<sub>0</sub> ~ Uniform(q<sub>min</sub> - &Delta;q, q<sub>max</sub> - &Delta;q), where q<sub>min</sub> = min{q<sub>1</sub>, q<sub>2</sub>, ..., q<sub>n</sub>}, q<sub>max</sub> = max{q<sub>1</sub>, q<sub>2</sub>, ..., q<sub>n</sub>} and &Delta;q = q<sub>max</sub> - q<sub>min</sub>,
+    * and [R]<sub>0</sub> and [L]<sub>s</sub> follow a lognormal distribution.
 
-- Numpyro: 
-Numpyro v0.4.1, Numpy v1.18.5, Matplotlib v3.2.2, Arviz v0.10.0
+## Software installation
 
-- Pyro:
-Pyro v1.5.1, Torch v1.7.0, Numpy v1.18.5, Matplotlib v3.2.2, Arviz v0.10.0
+PPLs were set up in virtual environments based on the following software and versions:
 
-- Pymc3:
-Pymc3 v3.8, Theano v1.0.5, Pandas v0.25, Arviz v0.4.1
+- Numpyro: Numpyro v0.4.1, Numpy v1.18.5, Matplotlib v3.2.2, Arviz v0.10.0
+- Pyro: Pyro v1.5.1, Torch v1.7.0, Numpy v1.18.5, Matplotlib v3.2.2, Arviz v0.10.0
+- Pymc3: Pymc3 v3.8, Theano v1.0.5, Pandas v0.25, Arviz v0.4.1
 
-- Python scripts: [numpyro](https://github.com/vanngocthuyla/bitc/blob/main/scripts/bitc_numpyro.py), [pyro](https://github.com/vanngocthuyla/bitc/blob/main/scripts/bitc_pyro.py), [pymc3](https://github.com/vanngocthuyla/bitc/blob/main/scripts/bitc_pymc3.py),
+## Sampling from the posterior
 
-## 3. Accessing the PPL models and comparing their performance
+Python scripts to set up the Bayesian posterior and perform Markov chain Monte Carlo sampling using the No-U-Turn Sampler were written in
+[numpyro](https://github.com/vanngocthuyla/bitc/blob/main/scripts/bitc_numpyro.py), [pyro](https://github.com/vanngocthuyla/bitc/blob/main/scripts/bitc_pyro.py), and [pymc3](https://github.com/vanngocthuyla/bitc/blob/main/scripts/bitc_pymc3.py).
+For each PPL, four independent chains with 2000 steps of warmup and 10000 samples were simulated.
 
-### Checking the convergence of 3 PPLs
-- Pymc3
+The calculations were run using the Pittsburg Supercomputer Center,
+on the Bridges cluster, by submitting "Regular Memory" jobs.
 
-<img align="center" src='https://github.com/vanngocthuyla/bitc/blob/main/images/Pymc3_Plot.png' width="800">
+- Host: bridges.psc.xsede.org
+- CPU Type: Intel Xeon EP-series
+- Operating System: CentOS
+- Batch System: SLURM
+- Memory Per CPU: 128 GB
+- CPU Cores Per Node: 28
 
-|Parameter|mean|sd|hpd_3%|hpd_97%|mcse_mean|mcse_sd|ess_mean|ess_sd|ess_bulk|ess_tail|r_hat|
-|:-------:|:--:|:-:|:---:|:-----:|:-------:|:-----:|:------:|:----:|:------:|:------:|:---:|
-|P0|0.088|0.006|0.077|0.100|0.000|0.000|12960.0|12866.0|13083.0|8512.0|1.0|
-|Ls|1.119|0.080|0.974|1.271|0.001|0.000|12979.0|12887.0|13100.0|8608.0|1.0|
-|DeltaG|-8.992|0.076|-9.135|-8.847|0.001|0.000|21974.0|21973.0|21894.0|34408.0|1.0|
-|DeltaH|-2.104|0.151|-2.388|-1.826|0.001|0.001|13464.0|13464.0|13362.0|11330.0|1.0|
-|DeltaH_0|-0.000|0.000|-0.000|-0.000|0.000|0.000|31162.0|31101.0|30914.0|34922.0|1.0|
-|log_sigma|-14.779|0.168|-15.091|-14.467|0.002|0.002|4880.0|4786.0|4233.0|1562.0|1.0|
+# Results
 
-- Numpyro
+## numpyro is orders of magnitude faster than other PPLs
 
-<img align="center" width="800" src='https://github.com/vanngocthuyla/bitc/blob/main/images/Numpyro_Plot.png'>
-
-|Parameter|mean|std|median|5.0%|95.0%|n_eff|r_hat|
-|:-------:|:--:|:-:|:----:|:--:|:---:|:---:|:---:|
-|P0|0.09|0.01|0.09|0.08|0.10|5376.25|1.00|
-|Ls|1.12|0.08|1.12|0.98|1.24|5377.76|1.00|
-|DeltaG|-8.99|0.08|-8.99|-9.12|-8.87|7859.73|1.00|
-|DeltaH|-2.10|0.15|-2.10|-2.34|-1.86|5488.17|1.00|
-|DeltaH_0|-0.00|0.00|-0.00|-0.00|-0.00|11006.09|1.00|
-|log_sigma|-14.78|0.16|-14.79|-15.05|-14.52|8316.83|1.00
-
-- Pyro
-
-<img align="center" src='https://github.com/vanngocthuyla/bitc/blob/main/images/Pyro_Plot.png' width="800">
-
-|Parameter|mean|std|median|5.0%|95.0%|n_eff|r_hat|
-|:-------:|:--:|:-:|:----:|:--:|:---:|:---:|:---:|
-|P0|0.09|0.01|0.09|0.08|0.10|9944.88|1.00|
-|Ls|1.12|0.08|1.11|0.99|1.24|9950.80|1.00|
-|DeltaG|-8.99|0.08|-8.99|-9.12|-8.87|14202.63|1.00|
-|DeltaH|-2.11|0.15|-2.10|-2.35|-1.86|10039.88|1.00|
-|DeltaH_0|-0.00|0.00|-0.00|-0.00|-0.00|20708.19|1.00|
-|log_sigma|-14.78|0.17|-14.79|-15.05|-14.51|16259.00|1.00|
-
-The trace plots and r_hat (Gelman-rubin) factors above indicate that in each PPL, the NUTS sampling model converged. To confirm that there was no difference between three Bayesian models, some statistical metrics would be plotted with the functions of the number of samples. In additions, the time for running was accessed to decide which PPL could provide the better performance. 
-
-### Comparison of 3 PPLs
-
-#### Plot mean/std with the functions of the number of samples
-
-Calculate the mean and standard deviation of 8-chain samples and plot with the function of the number of samples
-
-<img align="center" src='https://github.com/vanngocthuyla/bitc/blob/main/images/mean_std_P0.png' width="800">
-<img align="center" src='https://github.com/vanngocthuyla/bitc/blob/main/images/mean_std_Ls.png' width="800">
-<img align="center" src='https://github.com/vanngocthuyla/bitc/blob/main/images/mean_std_DeltaG.png' width="800">
-<img align="center" src='https://github.com/vanngocthuyla/bitc/blob/main/images/mean_std_DeltaH.png' width="800">
-<img align="center" src='https://github.com/vanngocthuyla/bitc/blob/main/images/mean_std_DeltaH_0.png' width="800">
-<img align="center" src='https://github.com/vanngocthuyla/bitc/blob/main/images/mean_std_log_sigma.png' width="800">
-
-Even though the means from some parameters (P0, Ls and DeltaH) of Pyro model were little different to those of Numpyro and Pymc3 models, this difference was relative small and could be ignored. For the standard deviations, except for log_sigma, the standard deviations of other parameters calculated by three PPLs were approximate. This suggested that the Bayesian models of three PPLs reached to the similar convergence. 
-
-#### Gelman-rubin statistics 
-
-Use function from Arviz to calculate r_hat factor of each paramete and plot r_hat with the function of the number of samples
-
-<p float="center">
-  <img src="https://github.com/vanngocthuyla/bitc/blob/main/images/rhat_P0.png" width="250" />
-  <img src="https://github.com/vanngocthuyla/bitc/blob/main/images/rhat_Ls.png" width="250" />
-  <img src="https://github.com/vanngocthuyla/bitc/blob/main/images/rhat_DeltaG.png" width="250" />
-</p>
-
-<p float="center">
-  <img src="https://github.com/vanngocthuyla/bitc/blob/main/images/rhat_DeltaH.png" width="250" />
-  <img src="https://github.com/vanngocthuyla/bitc/blob/main/images/rhat_DeltaH_0.png" width="250" />
-  <img src="https://github.com/vanngocthuyla/bitc/blob/main/images/rhat_log_sigma.png" width="250" /> 
-</p>
-
-r_hat (Gelman-rubin) factor is a common factor that can often be used to as the diagnosis for the convergence of the Bayesian model. From the above plots, except for r_hat calculated from the sampling of log_sigma of Pymc3 model was little different to those of Numpyro and Pyro models, the r_hat factors of other parameters from three PPLs were nearly equal to 1, pointing out that there was no difference between the multiple Markov chains of each PPL.
-
-#### Time
-
-Time for running 4 chains of 2000 warmups and 10000 samples by NUTS sampling: 
+The scripts took the following amount of time to generate an equivalent number of samples:
 - pymc3: 425.27 s
 - numpyro: 24.01 s
 - pyro: 34304.32 s
 
-Among the three PPLs, numpyro dramatically took the least time for running, especially in comparison to pyro, which took about 9.5 hours to reach the similar convergence as numpyro. 
+Among the three PPLs, numpyro is dramatically faster, especially in comparison to pyro, which took about 9.5 hours to generate the same number of samples. Disabling the progress bar decreased the run time of pyro and pymc3, but not by more than 10% of total run time. The difference in speed is stark and remarkable!
 
-Note: disable the progressbar while running can decrease the running time of pyro and pymc3, but not decrease more than 10% of total running time for each of these two PPLs. 
+Given the contrast in computational expense, we wanted to see if using numpyro entailed any sacrifices to the accuracy or to the effective sample size.
 
+## The sampled posterior distribution is consistent across the PPLs
 
-## Conclusion
+For all three PPLs, the time series are well-mixed and the distribution is consistent across the repetitions (Figure 1). The estimated mean values and standard deviations of all the parameter are very consistent (Table 1). For all parameters and all PPLs, the Gelman-Rubin statistic (r_hat) was calculated as 1.0, indicating that the independent chains yielded samples from a consistent posterior distribution.
 
-Numpyro can be considered as the fastly-performed PPL in comparison to Pyro and Pymc3. 
+### Figure 1. Histograms and time series of samples generated using pymc3, numpyro, and pyro
+
+- pymc3:
+<p><img align="center" src='https://github.com/vanngocthuyla/bitc-PPL-benchmark/raw/main/images/Pymc3_Plot.png' width="800"></p>
+
+- pyro:
+<p><img align="center" src='https://github.com/vanngocthuyla/bitc-PPL-benchmark/raw/main/images/Pyro_Plot.png' width="800"></p>
+
+- numpyro:
+<p><img align="center" src='https://github.com/vanngocthuyla/bitc-PPL-benchmark/raw/main/images/Numpyro_Plot.png' width="800"></p>
+
+### Table 1. Summary statistics for the posterior distribution of Bayesian parameters
+
+- pymc3
+
+|Parameter|mean|std|
+|:-------:|:--:|:-:|
+|P0|0.088|0.006|
+|Ls|1.119|0.080|
+|DeltaG|-8.992|0.076|
+|DeltaH|-2.104|0.151|
+|DeltaH_0|-0.000|0.000|
+|log_sigma|-14.779|0.168|
+
+- pyro
+
+|Parameter|mean|std|
+|:-------:|:--:|:-:|
+|P0|0.09|0.01|
+|Ls|1.12|0.08|
+|DeltaG|-8.99|0.08|
+|DeltaH|-2.11|0.15|
+|DeltaH_0|-0.00|0.00|
+|log_sigma|-14.78|0.17|
+
+- numpyro
+
+|Parameter|mean|std|
+|:-------:|:--:|:-:|
+|P0|0.09|0.01|
+|Ls|1.12|0.08|
+|DeltaG|-8.99|0.08|
+|DeltaH|-2.10|0.15|
+|DeltaH_0|-0.00|0.00|
+|log_sigma|-14.78|0.16|
+
+## Samples converge at a comparable rate
+
+For all three PPLs, the standard deviation of the estimated mean decreased at a comparable rate as a function of the number of samples (Figure 2). The Gelman-Rubin statistic also decreased to 1 at a comparable rate (Figure 3). Although samples from pymc3 arguably converge more slowly than pyro or numpyro, the relatively small number of chains precludes a more conclusive result.
+
+### Figure 2. Convergence of the mean value of each parameter
+
+For each chain, the mean value of each parameter was estimated as a function of the number of samples. The plots show the mean (left) and standard deviation (right) of these estimates across the independent chains.
+
+<img align="center" src='https://github.com/vanngocthuyla/bitc-PPL-benchmark/raw/main/images/mean_std_P0.png' width="800">
+<img align="center" src='https://github.com/vanngocthuyla/bitc-PPL-benchmark/raw/main/images/mean_std_Ls.png' width="800">
+<img align="center" src='https://github.com/vanngocthuyla/bitc-PPL-benchmark/raw/main/images/mean_std_DeltaG.png' width="800">
+<img align="center" src='https://github.com/vanngocthuyla/bitc-PPL-benchmark/raw/main/images/mean_std_DeltaH.png' width="800">
+<img align="center" src='https://github.com/vanngocthuyla/bitc-PPL-benchmark/raw/main/images/mean_std_DeltaH_0.png' width="800">
+<img align="center" src='https://github.com/vanngocthuyla/bitc-PPL-benchmark/raw/main/images/mean_std_log_sigma.png' width="800">
+
+### Figure 3. Gelman-Rubin Statistic
+
+The Gelman-Rubin statistic was plotted as a function of the number of samples using Arviz.
+
+<p float="center">
+  <img src="https://github.com/vanngocthuyla/bitc-PPL-benchmark/raw/main/images/rhat_P0.png" width="250" />
+  <img src="https://github.com/vanngocthuyla/bitc-PPL-benchmark/raw/main/images/rhat_Ls.png" width="250" />
+  <img src="https://github.com/vanngocthuyla/bitc-PPL-benchmark/raw/main/images/rhat_DeltaG.png" width="250" />
+</p>
+
+<p float="center">
+  <img src="https://github.com/vanngocthuyla/bitc-PPL-benchmark/raw/main/images/rhat_DeltaH.png" width="250" />
+  <img src="https://github.com/vanngocthuyla/bitc-PPL-benchmark/raw/main/images/rhat_DeltaH_0.png" width="250" />
+  <img src="https://github.com/vanngocthuyla/bitc-PPL-benchmark/raw/main/images/rhat_log_sigma.png" width="250" />
+</p>
+
+## Conclusions
+
+For the Bayesian analysis of ITC data, numpyro is orders of magnitude faster than pyro and pymc3. There are no apparent caveats to using the PPL.
